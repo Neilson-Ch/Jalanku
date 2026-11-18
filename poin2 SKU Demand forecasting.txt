@@ -1,0 +1,36 @@
+poin2 SKU Demand forecasting:
+- data terbagi jadi 3 yaitu:
+ calendar: hari, tahun, bulan, event, snap
+ price: Harga dari masing2 produk per store dan category, ada juga detail tahun dan minggu
+ sales: jumlah penjualan per hari dari masing2 produk per category per store per state
+- cek duplikat, null, nilai2 ga masuk akal
+- cek demandnya gimana, apakah semua 0, sering 0, jarang 0, average demand interval
+- cek variansi demand juga
+- cek rata2 demand per hari, rata2 demand secara keseluruhan, zero ratio, trailing zero (jumah demand 0 di akhir data)
+- cek distribusi zero demandnya (x= persentase 0, y=jumlah produk)
+- engineer kolom2 time series: rolling mean  untuk melihat trend
+- cek seasonality dan trend per week, month, year
+- cek dampak event terhadap demand nya
+- cek berapa hari sebelom event demandny naik
+- cek 12 level demand dan zero ratio: 
+	- state_id
+	- store_id
+	- cat_id
+	- dept_id
+	- state_id+cat_id
+	- state_id+dept_id
+	- store_id+cat_id
+	- store_id+dept_id
+	- item_id
+	- item_id+state_id
+	- item_id+store_id
+- buat baseline: moving_average_28, seasonal_naive_7, naive, seasonal_naive_28, backtest dan hitung errornya dari nilai aktualnya
+- cek error per level hierarki
+- lakuin feature engineering seperti rolling mean, lags, ewm, day_of_year, day_of_month, week_of_month
+- hitung jarak dari event sebelumnya dan ke event berikutnya dalam radius 7 hari
+- hitung rata-rata 28 hari untuk produk yang sama lintas toko, serta produk dalam kelompok toko-departemen; kemudian mengacak demand setelah cutoff dan membandingkan fitur.
+- engineer fitur sin dan cos untuk mendapat pola cyclical nya juga per year
+- lakuin prediksi pake model lgbm regressor dengan objective poisson dan tweedie, setting parameternya juga. lalu bandingin dengan baseline terbaik
+- backtest prediksi di 12 hierarki
+- errornya turun dari baseline
+- hasil shap menunjukan bahwa ewm_91 dan ewm_28 paling berpengaruh dimana mereka jika rata2 nya rendah, model menurunkan angka prediksi dan sebaliknya
